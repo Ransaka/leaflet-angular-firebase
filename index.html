@@ -17,11 +17,23 @@
   <script src="ui-leaflet-1.0.0/dist/ui-leaflet.min.js"></script>
   <script src="app.js"></script>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css">
+  <style media="screen">
+  body {
+padding: 0;
+margin: 0;
+}
 
+html,
+body,
+.angular-leaflet-map {
+  height: 100%;
+}
+
+  </style>
 </head>
 
 <body ng-controller="MarkersEventsAddController">
-  <leaflet lf-center="center" layers="layers" markers="markers" event-broadcast="events" height="480px" width="100%"></leaflet>
+  <leaflet lf-center="center" layers="layers" markers="markers" event-broadcast="events" width="100%"></leaflet>
   </leaflet>
   <!-- Modal -->
   <div class="modal fade" id="bofModal" tabindex="-1" role="dialog" aria-labelledby="bofModalLabel">
