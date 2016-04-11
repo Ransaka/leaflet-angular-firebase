@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="demoapp">
+
+<head>
+  <meta charset="utf-8">
+  <title>
+  </title>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+  <script type="text/javascript" src="angular-simple-logger/dist/angular-simple-logger.js">
+  </script>
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" media="screen" title="no title" charset="utf-8">
+  <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  <script src="ui-leaflet-1.0.0/dist/ui-leaflet.min.js"></script>
+  <script src="app.js"></script>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css">
+
+</head>
+
+<body ng-controller="MarkersEventsAddController">
+  <leaflet lf-center="center" layers="layers" markers="markers" event-broadcast="events" height="480px" width="100%"></leaflet>
+  </leaflet>
+  <!-- Modal -->
+  <div class="modal fade" id="bofModal" tabindex="-1" role="dialog" aria-labelledby="bofModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="bofModalLabel">Bof it!</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="messageText">What is this about</label>
+            <textarea ng-model="newMessageText" class="form-control" id="messageText" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="startTime">Start time</label>
+            <input id="newStartTime" ng-model="newStartTime" name="startTime" class="form-control" type="datetime-local">
+          </div>
+          <div class="form-group">
+            <label for="startTime">End time</label>
+            <input id="newEndTime" ng-model="newEndTime" name="endTime" class="form-control" type="datetime-local">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="postBof" data-dismiss="modal">Post BOF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
