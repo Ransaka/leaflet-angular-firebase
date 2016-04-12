@@ -3,7 +3,9 @@ var bofDataRef = new Firebase( 'https://kitb1w34vt8.firebaseio-demo.com/bofs' );
 app.controller( 'MarkersEventsAddController', [ '$scope', function ( $scope ) {
   angular.extend( $scope, {
     center: {
+      zoom:1,
       autoDiscover: true
+
     },
     events: {},
     layers: {
@@ -46,8 +48,8 @@ app.controller( 'MarkersEventsAddController', [ '$scope', function ( $scope ) {
       lat: parseFloat( marker.lat ),
       lng: parseFloat( marker.long ),
       message: marker.what,
-      layer: 'bofs',
-      draggable:marker.draggable
+      layer: 'bofs'//,
+      //draggable:marker.draggable
     } );
   } );
 
