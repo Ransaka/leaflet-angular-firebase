@@ -46,7 +46,8 @@ app.controller( 'MarkersEventsAddController', [ '$scope', function ( $scope ) {
       lat: parseFloat( marker.lat ),
       lng: parseFloat( marker.long ),
       message: marker.what,
-      layer: 'bofs'
+      layer: 'bofs',
+      draggable:marker.draggable
     } );
   } );
 
@@ -71,7 +72,8 @@ app.controller( 'MarkersEventsAddController', [ '$scope', function ( $scope ) {
       lat: coords[ 0 ],
       long: coords[ 1 ],
       maybe: 0,
-      sure: 0
+      sure: 0,
+      draggable:true
     };
     bofDataRef.push( marker );
     $( '#messageText, #newStartTime, #newEndTime' ).val( '' );
