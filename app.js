@@ -1,6 +1,6 @@
 var app = angular.module( "demoapp", [ 'ui-leaflet' ] );
 var bofDataRef = new Firebase( 'https://kitb1w34vt8.firebaseio-demo.com/bofs' );
-app.controller( 'MarkersEventsAddController', [ '$scope', function ( $scope ) {
+app.controller( 'MarkersEventsAddController', [ '$scope', '$filter', '$timeout', '$log', function ( $scope, $filter, $timeout, $log ) {
   angular.extend( $scope, {
     center: {
       zoom:1,
@@ -42,6 +42,10 @@ app.controller( 'MarkersEventsAddController', [ '$scope', function ( $scope ) {
 
   $scope.markers = [];
 
+
+
+
+
   bofDataRef.on( 'child_added', function ( snapshot ) {
     var marker = snapshot.val();
     $scope.markers.push( {
@@ -58,7 +62,6 @@ app.controller( 'MarkersEventsAddController', [ '$scope', function ( $scope ) {
     $( '#bofModal' ).attr( 'data-coords', [ leafEvent.latlng.lat, leafEvent.latlng.lng ] );
     $( '#bofModal' ).modal();
   } );
-
 
 
   $( '#postBof' ).on( 'click', function () {
@@ -80,4 +83,12 @@ app.controller( 'MarkersEventsAddController', [ '$scope', function ( $scope ) {
     bofDataRef.push( marker );
     $( '#messageText, #newStartTime, #newEndTime' ).val( '' );
   } );
+
+  $scope.$watch("markers", function() {
+    $scope.$watch('markerFilter', function (text) {
+      $scope.markersFiltered = $filter('filter')($scope.markers, {message:text});
+    });
+  },true);
+
+
 } ] );
