@@ -1,11 +1,10 @@
 var app = angular.module( "demoapp", [ 'ui-leaflet' ] );
 var bofDataRef = new Firebase( 'https://kitb1w34vt8.firebaseio-demo.com/bofs' );
-app.controller( 'MarkersEventsAddController', [ '$scope', '$filter', '$timeout', '$log', function ( $scope, $filter, $timeout, $log ) {
+app.controller( 'MarkersEventsAddController', [ '$scope', '$filter', '$timeout', '$log', 'leafletData', function ( $scope, $filter, $timeout, $log, leafletData ) {
   angular.extend( $scope, {
     center: {
-      zoom:1,
+      zoom:16,
       autoDiscover: true
-
     },
     events: {},
     layers: {
@@ -40,11 +39,21 @@ app.controller( 'MarkersEventsAddController', [ '$scope', '$filter', '$timeout',
     }
   } );
 
+  $scope.bofIt = function() {
+    leafletData.getMap().then(function(map) {
+      map.locate({setView: true, maxZoom: 16});
+      function onLocationFound(e) {
+          var radius = e.accuracy / 2;
+          $( '#bofModal' ).attr( 'data-coords', [ e.latlng.lat, e.latlng.lng ] );
+          L.marker(e.latlng).addTo(map)
+              .bindPopup('<a href="" data-toggle="modal" data-target="#bofModal">Add an event here?</a>').openPopup();
+          L.circle(e.latlng, radius).addTo(map);
+      }
+      map.on('locationfound', onLocationFound);
+    });
+  };
+
   $scope.markers = [];
-
-
-
-
 
   bofDataRef.on( 'child_added', function ( snapshot ) {
     var marker = snapshot.val();
@@ -89,6 +98,4 @@ app.controller( 'MarkersEventsAddController', [ '$scope', '$filter', '$timeout',
       $scope.markersFiltered = $filter('filter')($scope.markers, {message:text});
     });
   },true);
-
-
 } ] );
