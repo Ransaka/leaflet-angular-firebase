@@ -71,7 +71,9 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
 
   bofDataRef.on( 'child_added', function ( snapshot ) {
     var marker = snapshot.val();
+    var key = snapshot.key();
     newMarker = {
+      fbid:key,
       lat: parseFloat( marker.lat ),
       lng: parseFloat( marker.long ),
       category: marker.category,
@@ -153,6 +155,8 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
   $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
     var newlatlng = [args.model.lat,args.model.lng];
     // procede to update marker on firebase;
+    bofDataRefItem =  new Firebase( 'https://flickering-fire-3313.firebaseio.com/bofs/'  + args.model.fbid);
+    bofDataRefItem.update({ lat: args.model.lat, long: args.model.lng });
   });
 
 
