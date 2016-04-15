@@ -1,5 +1,7 @@
 var app = angular.module( "bofapp", [ 'ui-leaflet' ] );
-var bofDataRef = new Firebase( 'https://kitb1w34vt8.firebaseio-demo.com/bofs' );
+//var bofDataRef = new Firebase( 'https://kitb1w34vt8.firebaseio-demo.com/bofs' );
+var bofDataRef = new Firebase( 'https://flickering-fire-3313.firebaseio.com/bofs' );
+//sOkCRMFlS8UAI5PiV2DDK4qsyI1ecoC3npkxp06O
 app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'leafletData', function ( $scope, $filter, $timeout, $log, leafletData ) {
   angular.extend( $scope, {
     center: {
@@ -35,7 +37,11 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
           type: "markercluster",
           visible: true
         }
-      }
+      },
+      awesomeMarkerIcon: {
+        type: 'awesomeMarker',
+        markerColor: 'blue'
+      },
     }
   } );
 
@@ -69,8 +75,11 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       lat: parseFloat( marker.lat ),
       lng: parseFloat( marker.long ),
       category: marker.category,
+      //icon:awesomeMarkerIcon,
       message: '<p>' + marker.what + '</p><p>' + marker.category + '</p>',
-      layer: 'bofs'
+      layer: 'bofs',
+      draggable: marker.draggable,
+      icon: resolveIcon(marker.category)
     };
     $scope.markersAll.push(newMarker);
     $scope.markers.push(newMarker);
@@ -105,7 +114,7 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       category: $scope.categories,
       draggable: true
     };
-    bofDataRef.push( marker );
+    bofDataRef.push( marker);
     leafletData.getMap().then( function ( map ) {
       map.closePopup();
     } );
@@ -133,4 +142,21 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       } );
     } );
   }, true );
+
+  var resolveIcon = function(category) {
+      return ({
+        'cat1':{type: 'awesomeMarker',
+               icon: 'ok',
+               markerColor: 'blue'},
+        'cat2': {type: 'awesomeMarker',
+               icon: 'tag',
+               markerColor: 'red'},
+        'cat3': {type: 'awesomeMarker',
+               icon: 'cog',
+               markerColor: 'orange'}
+      }[String(category).toLowerCase()] || null);
+  }
+
+
+
 } ] );
