@@ -86,7 +86,8 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
     $scope.markers.push( newMarker );
   } );
 
-  $scope.$on( "leafletDirectiveMap.dblclick", function ( event, args ) {
+
+  $scope.$on( "leafletDirectiveMap.contextmenu", function ( event, args ) {
     leafletData.getMap().then( function ( map ) {
       var leafEvent = args.leafletEvent;
       $( '#bofModal' ).attr( 'data-coords', [ leafEvent.latlng.lat, leafEvent.latlng.lng ] );
