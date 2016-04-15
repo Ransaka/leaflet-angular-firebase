@@ -76,13 +76,13 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       lng: parseFloat( marker.long ),
       category: marker.category,
       //icon:awesomeMarkerIcon,
-      message: '<p>' + marker.what + '</p><p>' + marker.category + '</p>',
+      message: '<p>' + marker.what + '</p>',
       layer: 'bofs',
       draggable: marker.draggable,
-      icon: resolveIcon(marker.category)
+      icon: resolveIcon( marker.category )
     };
-    $scope.markersAll.push(newMarker);
-    $scope.markers.push(newMarker);
+    $scope.markersAll.push( newMarker );
+    $scope.markers.push( newMarker );
   } );
 
   $scope.$on( "leafletDirectiveMap.click", function ( event, args ) {
@@ -114,7 +114,7 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       category: $scope.categories,
       draggable: true
     };
-    bofDataRef.push( marker);
+    bofDataRef.push( marker );
     leafletData.getMap().then( function ( map ) {
       map.closePopup();
     } );
@@ -143,20 +143,28 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
     } );
   }, true );
 
-  var resolveIcon = function(category) {
-      return ({
-        'cat1':{type: 'awesomeMarker',
-               icon: 'ok',
-               markerColor: 'blue'},
-        'cat2': {type: 'awesomeMarker',
-               icon: 'tag',
-               markerColor: 'red'},
-        'cat3': {type: 'awesomeMarker',
-               icon: 'cog',
-               markerColor: 'orange'}
-      }[String(category).toLowerCase()] || null);
-  }
-
-
+  var resolveIcon = function ( category ) {
+    return ( {
+      'cat1': {
+        type: 'awesomeMarker',
+        icon: 'cutlery',
+        markerColor: 'green'
+      },
+      'cat2': {
+        type: 'awesomeMarker',
+        icon: 'heart',
+        markerColor: 'red'
+      },
+      'cat3': {
+        type: 'awesomeMarker',
+        icon: 'music',
+        markerColor: 'orange'
+      }
+    }[ String( category ).toLowerCase() ] || {
+      type: 'awesomeMarker',
+      icon: 'record',
+      markerColor: 'blue'
+    } );
+  };
 
 } ] );
