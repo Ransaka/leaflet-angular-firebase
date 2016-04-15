@@ -75,11 +75,10 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       lat: parseFloat( marker.lat ),
       lng: parseFloat( marker.long ),
       category: marker.category,
-      //icon:awesomeMarkerIcon,
       message:resolveCategory( marker.category ) + '<div>' + marker.what + '</div>',
       layer: 'bofs',
-      draggable: marker.draggable,
-      icon: resolveIcon( marker.category )
+      icon: resolveIcon( marker.category ),
+      draggable:marker.draggable
     };
     $scope.markersAll.push( newMarker );
     $scope.markers.push( newMarker );
@@ -150,7 +149,17 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       } );
     } );
   }, true );
+
+  $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
+    var newlatlng = [args.model.lat,args.model.lng];
+    // procede to update marker on firebase;
+  });
+
+
+
+
 } ] );
+
 
 var resolveCategory = function ( category ) {
   if(category) {
