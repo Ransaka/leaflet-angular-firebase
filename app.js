@@ -76,7 +76,7 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       lng: parseFloat( marker.long ),
       category: marker.category,
       //icon:awesomeMarkerIcon,
-      message: '<p>' + marker.what + '</p>',
+      message:resolveCategory( marker.category ) + '<div>' + marker.what + '</div>',
       layer: 'bofs',
       draggable: marker.draggable,
       icon: resolveIcon( marker.category )
@@ -85,7 +85,7 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
     $scope.markers.push( newMarker );
   } );
 
-  $scope.$on( "leafletDirectiveMap.click", function ( event, args ) {
+  $scope.$on( "leafletDirectiveMap.dblclick", function ( event, args ) {
     leafletData.getMap().then( function ( map ) {
       var leafEvent = args.leafletEvent;
       $( '#bofModal' ).attr( 'data-coords', [ leafEvent.latlng.lat, leafEvent.latlng.lng ] );
@@ -97,6 +97,13 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
   } );
 
   $( '#postBof' ).on( 'click', function () {
+    if($( '#messageText' ).val() ===''){
+      $( '#messageText' ).attr('aria-invalid',true);
+      $( '#messageText' ).closest('div').addClass('has-error');
+      $( '#messageText' ).prev('.req-text').fadeIn('fast');
+      return null;
+    }
+
     var what = $( '#messageText' ).val();
     var start = $( '#newStartTime' ).val();
     var end = $( '#newEndTime' ).val();
@@ -119,6 +126,7 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       map.closePopup();
     } );
     $( '#messageText, #newStartTime, #newEndTime' ).val( '' );
+    $('#bofModal').modal('hide');
   } );
 
 
@@ -142,29 +150,38 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       } );
     } );
   }, true );
-
-  var resolveIcon = function ( category ) {
-    return ( {
-      'cat1': {
-        type: 'awesomeMarker',
-        icon: 'cutlery',
-        markerColor: 'green'
-      },
-      'cat2': {
-        type: 'awesomeMarker',
-        icon: 'heart',
-        markerColor: 'red'
-      },
-      'cat3': {
-        type: 'awesomeMarker',
-        icon: 'music',
-        markerColor: 'orange'
-      }
-    }[ String( category ).toLowerCase() ] || {
-      type: 'awesomeMarker',
-      icon: 'record',
-      markerColor: 'blue'
-    } );
-  };
-
 } ] );
+
+var resolveCategory = function ( category ) {
+  if(category) {
+    return '<strong>' + category + '</strong>';
+  }
+  else {
+    return '';
+  }
+};
+
+
+var resolveIcon = function ( category ) {
+  return ( {
+    'cat1': {
+      type: 'awesomeMarker',
+      icon: 'cutlery',
+      markerColor: 'green'
+    },
+    'cat2': {
+      type: 'awesomeMarker',
+      icon: 'heart',
+      markerColor: 'red'
+    },
+    'cat3': {
+      type: 'awesomeMarker',
+      icon: 'music',
+      markerColor: 'orange'
+    }
+  }[ String( category ).toLowerCase() ] || {
+    type: 'awesomeMarker',
+    icon: 'record',
+    markerColor: 'blue'
+  } );
+};
