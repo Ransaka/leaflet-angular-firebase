@@ -1,7 +1,5 @@
 var app = angular.module( "bofapp", [ 'ui-leaflet' ] );
-//var bofDataRef = new Firebase( 'https://kitb1w34vt8.firebaseio-demo.com/bofs' );
 var bofDataRef = new Firebase( 'https://flickering-fire-3313.firebaseio.com/bofs' );
-//sOkCRMFlS8UAI5PiV2DDK4qsyI1ecoC3npkxp06O
 app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'leafletData', function ( $scope, $filter, $timeout, $log, leafletData ) {
   angular.extend( $scope, {
     center: {
@@ -9,6 +7,9 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       autoDiscover: true
     },
     events: {},
+    controls: {
+      draw: {}
+    },
     layers: {
       baselayers: {
         mapbox_light: {
@@ -18,6 +19,9 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
           layerOptions: {
             id: 'gsilver.pk8alhme',
             accessToken: 'pk.eyJ1IjoiZ3NpbHZlciIsImEiOiJjaW1xYmxianowMGZsdXJra2FjbXhpYjE4In0.LL9yfFdOwvatCyCbxBDW_A',
+          },
+          layerParams: {
+            showOnSelector: false
           }
         },
         osm: {
@@ -29,6 +33,21 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
           name: 'Terrain',
           url: 'http://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.png',
           type: 'xyz',
+        },
+        osmh: {
+          name: 'OpenStreetMap Hot',
+          type: 'xyz',
+          url: 'http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+        },
+        esriwsm: {
+          name: 'Esri World StreetMap',
+          type: 'xyz',
+          url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'
+        },
+        esrisatellite: {
+          name: 'Esri Satellite',
+          type: 'xyz',
+          url: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
         }
       },
       overlays: {
@@ -36,6 +55,14 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
           name: "Bofs",
           type: "markercluster",
           visible: true
+        },
+        draw: {
+          name: 'draw',
+          type: 'group',
+          visible: true,
+          layerParams: {
+            showOnSelector: false
+          }
         }
       },
       awesomeMarkerIcon: {
@@ -63,6 +90,17 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
           .openOn( map );
       }
       map.on( 'locationfound', onLocationFound );
+
+      /*
+      leafletData.getLayers().then( function ( baselayers ) {
+        var drawnItems = baselayers.overlays.draw;
+        map.on( 'draw:created', function ( e ) {
+          var layer = e.layer;
+          drawnItems.addLayer( layer );
+          console.log( JSON.stringify( layer.toGeoJSON() ) );
+        } );
+      } );
+      */
     } );
   };
 
@@ -73,14 +111,14 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
     var marker = snapshot.val();
     var key = snapshot.key();
     newMarker = {
-      fbid:key,
+      fbid: key,
       lat: parseFloat( marker.lat ),
       lng: parseFloat( marker.long ),
       category: marker.category,
-      message:resolveCategory( marker.category ) + '<div>' + marker.what + '</div>',
+      message: resolveCategory( marker.category ) + '<div>' + marker.what + '</div>',
       layer: 'bofs',
       icon: resolveIcon( marker.category ),
-      draggable:marker.draggable
+      draggable: marker.draggable
     };
     $scope.markersAll.push( newMarker );
     $scope.markers.push( newMarker );
@@ -99,10 +137,10 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
   } );
 
   $( '#postBof' ).on( 'click', function () {
-    if($( '#messageText' ).val() ===''){
-      $( '#messageText' ).attr('aria-invalid',true);
-      $( '#messageText' ).closest('div').addClass('has-error');
-      $( '#messageText' ).prev('.req-text').fadeIn('fast');
+    if ( $( '#messageText' ).val() === '' ) {
+      $( '#messageText' ).attr( 'aria-invalid', true );
+      $( '#messageText' ).closest( 'div' ).addClass( 'has-error' );
+      $( '#messageText' ).prev( '.req-text' ).fadeIn( 'fast' );
       return null;
     }
 
@@ -128,7 +166,7 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
       map.closePopup();
     } );
     $( '#messageText, #newStartTime, #newEndTime' ).val( '' );
-    $('#bofModal').modal('hide');
+    $( '#bofModal' ).modal( 'hide' );
   } );
 
 
@@ -153,28 +191,25 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
     } );
   }, true );
 
-  $scope.$on("leafletDirectiveMarker.dragend", function(event, args){
-    var newlatlng = [args.model.lat,args.model.lng];
+  $scope.$on( "leafletDirectiveMarker.dragend", function ( event, args ) {
+    var newlatlng = [ args.model.lat, args.model.lng ];
     // procede to update marker on firebase;
-    bofDataRefItem =  new Firebase( 'https://flickering-fire-3313.firebaseio.com/bofs/'  + args.model.fbid);
-    bofDataRefItem.update({ lat: args.model.lat, long: args.model.lng });
-  });
-
-
-
-
+    bofDataRefItem = new Firebase( 'https://flickering-fire-3313.firebaseio.com/bofs/' + args.model.fbid );
+    bofDataRefItem.update( {
+      lat: args.model.lat,
+      long: args.model.lng
+    } );
+  } );
 } ] );
 
 
 var resolveCategory = function ( category ) {
-  if(category) {
+  if ( category ) {
     return '<strong>' + category + '</strong>';
-  }
-  else {
+  } else {
     return '';
   }
 };
-
 
 var resolveIcon = function ( category ) {
   return ( {

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>
+  <title>Map thingy
   </title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="bower_components/leaflet/dist/leaflet.js"></script>
@@ -22,6 +22,10 @@
 
   <link rel="stylesheet" href="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
   <script src="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.min.js"></script>
+
+  <link rel="stylesheet" href="bower_components/leaflet-draw/dist/leaflet.draw.css">
+  <script src="bower_components/leaflet-draw/dist/leaflet.draw.js"></script>
+
 
 
 
@@ -89,7 +93,7 @@
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
-  <leaflet lf-center="center" layers="layers" markers="markersFiltered" width="100%"></leaflet>
+  <leaflet lf-center="center" controls="controls" layers="layers" markers="markersFiltered" width="100%"></leaflet>
 
   <!-- Modal -->
   <div class="modal fade" id="bofModal" tabindex="-1" role="dialog" aria-labelledby="bofModalLabel">

@@ -25,6 +25,7 @@
     "ui-leaflet": "https://angular-ui.github.com/ui-leaflet",
     "jquery": "1.10.1",
     "angular": "^1.5.3",
-    "Leaflet.awesome-markers": "2.0.1"
+    "Leaflet.awesome-markers": "2.0.1",
+    "leaflet-draw": "https://github.com/Leaflet/Leaflet.draw.git#^0.3.0"
   }
 }
