@@ -21,7 +21,7 @@ app.controller( 'mapController', [ '$scope', '$filter', '$timeout', '$log', 'lea
             accessToken: 'pk.eyJ1IjoiZ3NpbHZlciIsImEiOiJjaW1xYmxianowMGZsdXJra2FjbXhpYjE4In0.LL9yfFdOwvatCyCbxBDW_A',
           },
           layerParams: {
-            showOnSelector: false
+            showOnSelector: true
           }
         },
         osm: {
